@@ -1,0 +1,16 @@
+from pydantic import BaseModel
+
+class PostGetResponse(BaseModel):
+    ...
+
+class PostCreateSchema(BaseModel):
+    ...
+
+class PostCreateResponseSchema(BaseModel):
+    ...
+
+class PostDeleteSchema(BaseModel):
+    ...
+
+class PostDeleteResponseSchema(BaseModel):
+    ...

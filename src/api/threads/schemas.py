@@ -1,0 +1,16 @@
+from pydantic import BaseModel
+
+class ThreadGetResponseSchema(BaseModel):
+    ...
+
+class ThreadCreateSchema(BaseModel):
+    ...
+
+class ThreadCreateResponseSchema(BaseModel):
+    ...
+
+class ThreadDeleteSchema(BaseModel):
+    ...
+
+class ThreadDeleteResponseSchema(BaseModel):
+    ...
