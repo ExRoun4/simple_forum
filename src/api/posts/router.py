@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status, Query, Path
+from fastapi import APIRouter, status, Path
 from src.api.posts import service, schemas, constants
 
 router = APIRouter(

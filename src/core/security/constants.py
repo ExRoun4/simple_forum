@@ -1,5 +1,8 @@
 from enums import Enum
 
+MAX_SESSIONS: int = 5
+PASSWORD_ENCODING: str = "utf-8"
+
 class JWTTypes(str, Enum):
     ACCESS = "access"
     REFRESH = "refresh"

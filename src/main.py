@@ -5,16 +5,16 @@ from src.api.auth.router import router as auth_router
 from src.api.threads.router import router as threads_router
 from src.api.posts.router import router as posts_router
 from src.core.database import create_db
+from src.core.redis_db import init_redis, close_redis
 
-## TEST - for creating db
 @asynccontextmanager
 async def lifespan(current_app: FastAPI):
-    print("Starting Forum")
+    await init_redis()
     await create_db()
 
     yield
 
-    print("Server shutting down")
+    await close_redis()
 
 app = FastAPI(
     title="Simple forum",

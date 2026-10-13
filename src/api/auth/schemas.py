@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+
 
 class AuthRegisterSchema(BaseModel):
     username: str
@@ -9,8 +10,7 @@ class AuthRegisterResponseSchema(BaseModel):
     username: str
     email: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class AuthLoginSchema(BaseModel):
     login: str
@@ -20,7 +20,7 @@ class AuthLoginResponseSchema(BaseModel):
     access_token: str
 
 class AuthLogoutResponseSchema(BaseModel):
-    ...
+    status: str = "success"
 
 class AuthRefreshResponseSchema(BaseModel):
     access_token: str

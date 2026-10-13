@@ -2,9 +2,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 import src.core.security.security as security
 
+from redis.asyncio import Redis
 from fastapi import APIRouter, status, Depends, Response, Cookie, Request
 from src.api.auth import constants, schemas, service
 from src.core.database import create_session
+from src.core.redis_db import get_redis
 
 router = APIRouter(
     prefix=constants.Routes.PREFIX,
@@ -25,25 +27,26 @@ async def login_user(
     request: Request,
     response: Response,
     db: AsyncSession = Depends(create_session),
+    redis: Redis = Depends(get_redis)
 ) -> schemas.AuthLoginResponseSchema:
-    auth_response = await service.login_user(payload, request, response, db)
+    auth_response = await service.login_user(payload, request, response, db, redis)
     return auth_response
 
 @router.post(constants.Routes.LOGOUT, response_model=schemas.AuthLogoutResponseSchema)
 async def logout_user(
     response: Response,
-    refresh_token: str | None = Cookie(default=None, alias=security.jwt_settings.JWT_REFRESH_TOKEN_NAME),
-    db: AsyncSession = Depends(create_session)
+    refresh_token: str | None = Cookie(default=None, alias=security.jwt_settings.REFRESH_TOKEN_NAME),
+    redis: Redis = Depends(get_redis)
 ) -> schemas.AuthLogoutResponseSchema:
-    logout_response = await service.logout_user(response, refresh_token, db)
+    logout_response = await service.logout_user(response, refresh_token, redis)
     return logout_response
 
 @router.post(constants.Routes.REFRESH, response_model=schemas.AuthRefreshResponseSchema)
 async def refresh_user_tokens(
     request: Request,
     response: Response,
-    refresh_token: str | None = Cookie(default=None, alias=security.jwt_settings.JWT_REFRESH_TOKEN_NAME),
-    db: AsyncSession = Depends(create_session)
+    refresh_token: str | None = Cookie(default=None, alias=security.jwt_settings.REFRESH_TOKEN_NAME),
+    redis: Redis = Depends(get_redis)
 ) -> schemas.AuthRefreshResponseSchema:
-    refresh_response = await service.refresh_user_session(refresh_token, request, response, db)
+    refresh_response = await service.refresh_user_session(refresh_token, request, response, redis)
     return refresh_response
